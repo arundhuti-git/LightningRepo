@@ -1,0 +1,150 @@
+<apex:page controller="CalculateHrs" extensions="SaveAsPdfExtension" contentType="{! renderedContentType }" renderAs="{! renderingService }">
+    You are viewing the Demo Site.
+    <apex:includeScript value="{!$Resource.jquery}"/>
+    <apex:includeScript value="http://ajax.microsoft.com/ajax/jquery.validate/1.6/jquery.validate.min.js"/>
+
+    <script type="text/javascript"> 
+         j$ = jQuery.noConflict();
+         var ary = [];
+         //alert({!hasSelCmp});
+
+         function pushToAry(name, val) {
+           ary.push({compononentname:name,complexityval:val});
+         }
+    
+    
+        function onCmpNoClk(cmpno,cmpVal){
+       	 alert(cmpno+ '/'+cmpVal);
+            //var x='{!CmpNo}';
+         "var x = '{!CmpNo}'; "
+        }
+    
+    
+
+        function onCheck(cmpVal,cmplxVal){  
+            //alert(cmpVal+ '/'+cmplxVal);
+          if(cmplxVal==''){
+               
+               /*if(cmpVal==''){
+                   var is_selected_check= document.getElementById(cmpVal).firstChild;
+                   if(is_selected_check.checked = true && status_array.indexOf(cmpVal) != -1) {
+                    alert("already checked1");
+                    delete status_array[cmpVal];
+                   }
+                }*/
+              
+               
+               if(cmpVal!=''){
+                   //alert("Please select the complexity status.");
+                  pushToAry(cmpVal, cmplxVal);
+                  for (var i = 0; i < ary.length; i++) {
+                      //alert(ary[i].compononentname+ ':'+ary[i].complexityval);
+                  }
+              }
+           }
+          
+          
+          //autocheck functionality
+          if(cmpVal!='' && cmplxVal!=''){
+               var is_selected_check= document.getElementById(cmpVal).firstChild;
+               if(is_selected_check.checked == true && j$.inArray( cmpVal, ary)) {//ary.indexOf(cmpVal) != -1
+                   //alert(cmpVal +'----arryvals');
+                   for (var i = 0; i < ary.length; i++) {
+                        //alert('current array element'+ary[i].compononentname);
+                        if(ary[i].compononentname == cmpVal ){
+                            //alert(cmpVal +'----test');
+                            ary.remove[ary[i].compononentname];
+                            delete ary[ary[i].compononentname];
+                            ary.splice(ary[i].compononentname);
+                        }
+                   }
+               }
+               
+              //alert("Please select the component name.");
+              var selected_id = document.getElementById(cmpVal).firstChild;
+              selected_id.checked = true;
+          }
+        }
+    
+     function check_validation_status(objSubmitBtn){
+     
+      for (var i = 0; i < ary.length; i++) {
+          //alert(ary[i].compononentname+ ':'+ary[i].complexityval);
+        //alert("already checked2");
+        //delete status_array[i];
+      } 
+      //return false;
+      
+      /*if(status_array.length > 0){
+        
+         alert("Please select any one component.");
+         return false;
+      }
+        return true;*/
+         //alert(objSubmitBtn);
+         objSubmitBtn.disabled = true;
+         doSubmit();
+        
+    } 
+
+    </script>
+
+    
+    
+    
+    
+    <apex:form id="EstimationForm" title="Calculate Hours" style="text-align: right; margin: 10px;">
+    <apex:inputHidden id="vldStatus"/>
+    <apex:pageMessages id="errormsg" />
+     <apex:pageBlock id="theBlock"> 
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Calculate Estimated Hours" action="{!checkSelectedValue}" onclick="return check_validation_status(this.value);"  rendered="{! If(NOT(hasSelCmp) ,true,false) }"/> 
+                <!---apex:outputLink value="Next" rendered="{!If(NOT(hasSelCmp),false,true)}">Next</apex:outputLink--->
+                
+                <apex:commandButton value="Next" action="{!calculateResource}"  rendered="{!If(NOT(hasSelCmp),false,true)}"/>
+                
+            </apex:pageBlockButtons> 
+            
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!LstwrapperCmp}" var="w" style="width:999px">
+                    <apex:column headervalue="Component Name" >
+                        <div id="{!SUBSTITUTE(w.Name,' ','_')}">
+                            <apex:inputCheckbox value="{!w.isSelected}" styleClass="chkSelected" onclick="onCheck('{!SUBSTITUTE(w.Name,' ','_')}','')" />{!w.Name}
+                        </div>
+                    </apex:column>
+                    
+                    <apex:column headervalue="No of Component">
+                        <apex:pageBlockSectionItem >
+                           <apex:selectList size="1" value="{!cmp_no}" onchange="onCmpNoClk('{!SUBSTITUTE(w.Name,' ','_')}',this.value)"  > 
+                               <apex:selectOptions value="{!ComponentCnt}"/>  
+                           </apex:selectList>
+                           <!---apex:actionSupport event="onchange" action="{!onCmpNoClk}" rerender="pb"/--->
+                        </apex:pageBlockSectionItem>  
+                    </apex:column>
+                                       
+                    <apex:column headervalue="Complexity Status" id="pb">
+                        <apex:selectRadio value="{!w.selectedComplexity }" onclick="onCheck('{!SUBSTITUTE(w.Name,' ','_')}',this.value)"> <apex:selectOptions value="{!items}" /></apex:selectRadio>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+            <!-- SELECTED ACCOUNT INFO -->
+            <apex:pageBlockSection >
+                <apex:outputPanel layout="block" rendered="{!hasSelCmp}">
+                    <apex:outputText value="Below are the selected account:"/>
+                    <br/>
+                    <apex:outputText value="{!selCmpNames}"/>
+                </apex:outputPanel>
+                <apex:outputPanel layout="block" rendered="{!NOT(hasSelCmp)}">
+                    <br/>
+                    <apex:outputText value="No account selected."/>
+                </apex:outputPanel>
+                
+                <apex:outputPanel layout="block" rendered="{!hasSelCmp}">
+                    <apex:outputText value="Total hours require to estimate:"/><apex:outputText value="{!calculatedhrs}"/> Hours
+                </apex:outputPanel>
+            </apex:pageBlockSection> 
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,8 @@
+<apex:page controller="custom_account_add">
+  <apex:form >
+  
+      Input the account name <apex:inputField value="{!acc.name}"/>
+      
+      <apex:commandButton value="save" action="{!save}"/>
+  </apex:form>
+</apex:page>

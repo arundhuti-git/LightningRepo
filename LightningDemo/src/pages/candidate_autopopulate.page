@@ -1,0 +1,42 @@
+<apex:page standardController="Candidate__c" extensions="sampleset">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: candidate_autopopulate
+  <!-- End Default Content REMOVE THIS -->
+  <apex:form >
+      <apex:pageBlock mode="edit">
+          <apex:pageBlockSection > 
+              <apex:inputText value="{!Name}" label="Name"/>
+              <apex:inputText value="{!email}" label="Email"/>
+              <apex:inputText value="{!phone}" label="Phone No."/>
+          
+          <apex:pageBlockSectionItem >
+              <apex:outputLabel value="Country" />
+                  <apex:selectList size="1" value="{!Country}">
+                      <apex:selectOptions value="{!countryobj}" />
+                      <apex:actionSupport event="onchange" reRender="{!cities}"/>
+                  </apex:selectList>
+          </apex:pageBlockSectionItem>
+          
+         
+          <apex:pageBlockSectionItem >   
+              <apex:outputLabel value="City" />
+                  <apex:selectList size="1" value="{!cities}">
+                      <apex:selectOptions value="{!cityobj}"></apex:selectOptions>
+                  </apex:selectList>
+          </apex:pageBlockSectionItem>
+          
+          
+          
+          
+          
+          </apex:pageBlockSection>
+          <apex:pageBlockButtons >
+          <apex:commandButton action="{!recordinsert}"  value="Save"/>
+          </apex:pageBlockButtons>
+          
+      </apex:pageBlock>
+  </apex:form>
+  
+  
+</apex:page>

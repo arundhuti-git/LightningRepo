@@ -1,0 +1,70 @@
+<apex:page standardController="Opportunity" sidebar="false" extensions="OpportunityStatusPFController">
+<script src="{!URLFOR($Resource.cometd,'cometd/cometd.js')}"/>
+<script src="{!URLFOR($Resource.cometd,'cometd/jquery-1.5.1.js')}"/>
+<script src="{!URLFOR($Resource.cometd,'cometd/json2.js')}"/>
+<script src="{!URLFOR($Resource.cometd,'cometd/jquery.cometd.js')}"/>
+
+
+<apex:sectionHeader title="Opportunity Stage" subtitle="Indicator"/>
+<style>
+.circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  font-size: 25px;
+  color: #fff;
+  line-height: 300px;
+  text-align: center;
+  background: #d9534f;
+}
+</style>
+
+
+<div class="circle">{!currentStatus}</div>
+
+
+<script>
+$(document).ready(function() {
+    setcolor( $(".circle").text());
+    //alert(window.location.protocol+'**'+window.location.hostname);
+    //alert('OAuth {!$Api.Session_ID}');
+    
+    //alert({!$Api.Session_ID});
+    //alert(window.location.protocol+'//'+window.location.hostname+'/cometd/41.0/');
+    
+    $.cometd.init({
+        url: window.location.protocol+'//'+window.location.hostname+'/cometd/41.0/',
+        requestHeaders: { Authorization: 'OAuth {!$Api.Session_ID}'}
+    });
+    
+     
+    
+    $.cometd.subscribe('/event/Opportunity_Status_Event__e', function(message) {
+        if(message.data.payload.Record_Id__c == "{!oppId}"){
+            $(".circle").text(message.data.payload.Status__c);
+            
+            setcolor( $(".circle").text());
+        }
+        
+    });
+});
+
+function setcolor(circolor){
+    if(circolor == 'Prospecting')
+        $(".circle").css("background-color","#f7f7f7");
+    else if(circolor == 'Qualification'){
+        $(".circle").css("background-color","#0275d8");
+    }else if(circolor == 'Needs Analysis'){
+        $(".circle").css("background-color","#5bc0de");
+    }else if(circolor == 'Value Proposition'){
+        $(".circle").css("background-color","#f0ad4e");
+    }else if(circolor == 'Perception Analysis'){
+        $(".circle").css("background-color","#d9534f");
+    }else if(circolor == 'Negotiation/Review'){
+        $(".circle").css("background-color","#292b2c");
+    }else if(circolor == 'Closed Won'){
+        $(".circle").css("background-color","#5cb85c");
+       }
+}
+</script>
+</apex:page>

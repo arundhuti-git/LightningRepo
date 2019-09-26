@@ -1,0 +1,50 @@
+<apex:page controller="CalculateWeek">
+    <apex:form >
+      
+      Total Estimated Time : {!estmHrs} Hours
+      <apex:pageBlock >
+            <apex:pageBlockButtons style="float:right;">
+                <apex:commandButton id="cmdAdd" value="+"  reRender="slectedRows" action="{!addRows}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Select Resource Role" showHeader="false">
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select Resource Role" /> 
+                   <apex:selectList size="5"  value="{!selectedrole}"> 
+                       <apex:selectOptions value="{!ResourceroleOption}"/>  
+                   </apex:selectList>
+              </apex:pageBlockSectionItem>
+              <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select Resource Number" /> 
+                   <apex:selectList size="5"  value="{!selecedRno}"> 
+                       <apex:selectOptions value="{!ResourcenoOption}"/>  
+                   </apex:selectList>
+              </apex:pageBlockSectionItem>
+              
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+	  <apex:pageBlock id="slectedRows">
+          <apex:pageBlockTable value="{!sampRows}" var="a" >
+              <apex:column headerValue="Resource Role">
+                  <apex:outputText value="{!a.wc_selected_role}"/>
+              </apex:column>
+              <apex:column headerValue="No. Of Resource">
+                  <apex:outputText value="{!a.wc_selected_rno}"/> 
+              </apex:column>
+              <apex:column headerValue="Allocated times(in Hours)">
+                  <apex:outputText value="{!a.wc_alcHrs}"/> 
+              </apex:column>
+          </apex:pageBlockTable>
+          <apex:pageBlockSection >
+              <!--apex:outputPanel>
+                  <apex:outputText value="Below are the selected account:"/><br/>
+                  <apex:outputText value="{!selected_vals}"/>
+              </apex:outputPanel-->
+              <apex:outputPanel layout="block" rendered="{!if(total_estmHrs!=0,true,false)}" style="float:right;">
+                  <apex:outputText value="Estimated Hours in Week: " /><apex:outputText value="{!ROUND(estmHrs/total_estmHrs,2)}"/> Weeks
+              </apex:outputPanel>
+              
+          </apex:pageBlockSection> 
+        </apex:pageBlock>
+
+    </apex:form>    
+</apex:page>

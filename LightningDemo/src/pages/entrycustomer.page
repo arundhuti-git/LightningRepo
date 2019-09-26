@@ -1,0 +1,24 @@
+<!-- VisualForce Page Responsible for Entry of Customer Records -->
+  <apex:page controller="CustomerEntryPageControllerNew"> 
+    <apex:form >
+      <apex:pageBlock title="Candidate Information" >
+         <apex:pageMessages />
+         <!-- Display Save and Cancel Button -->
+         
+         <apex:pageBlockButtons >
+          
+                <apex:commandButton value="Save" action="{!quicksave}" id="saveButton"  />
+                
+            </apex:pageBlockButtons>
+         
+         
+         <!-- A PageBlockSection for Entry and Display Customer Values --> 
+         <apex:pageBlockSection title="Information" columns="2">
+            <apex:outputField value="{!customerObj.Name}"/>
+            <apex:outputField value="{!customerObj.Mobile_Number__c}">
+               <apex:inlineEditSupport showOnEdit="saveButton" event="ondblclick"/>    
+            </apex:outputField>
+         </apex:pageBlockSection>
+      </apex:pageBlock>
+   </apex:form>
+   </apex:page>

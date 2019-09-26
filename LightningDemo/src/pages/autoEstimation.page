@@ -1,0 +1,72 @@
+<apex:page controller="CalculateAutoEstHrs">
+    
+    <apex:form title="Calculate Hours" style="text-align: right; margin: 10px;">
+        <apex:pageBlock > 
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Calculate Estimated Hours" action="{!checkSelectedValue}"/>
+ 				<apex:commandButton value="Next" action="{!calculateResource}"   rendered="{!If(NOT(hasSelCmp),false,true)}"/>
+            </apex:pageBlockButtons> 
+            
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!LstwrapperCmp}" var="w" style="width:999px">
+                	<apex:column headervalue="Component Name" >
+                        <div id="{!SUBSTITUTE(w.Name,' ','_')}">
+                            <apex:inputCheckbox value="{!w.isSelected}" styleClass="chkSelected" onclick="onCheck('{!SUBSTITUTE(w.Name,' ','_')}','')" />{!w.Name}
+                        </div>
+                    </apex:column>
+                    <apex:column headervalue="No of Component">
+                        
+                        <apex:pageBlockSectionItem >
+                            <!---apex:repeat value="{!w.Items}" var="a" --->
+                            <apex:outputText style="padding-left:10px;padding-right:10px;">Simple</apex:outputText>
+                            <apex:selectList size="1" value="{!w.smplcmpNo}" > 
+                                <apex:selectOptions value="{!w.ComponentCnt}" />  
+                            </apex:selectList>
+                            <!---/apex:repeat--->
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputText style="padding-left:10px;padding-right:10px;">Medium</apex:outputText>
+                            <apex:selectList size="1" value="{!w.mdcmpNo}" > 
+                                <apex:selectOptions value="{!w.ComponentCnt}" />  
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            
+                            <apex:outputText style="padding-left:10px;padding-right:10px;">Complex</apex:outputText>
+                            <apex:selectList size="1" value="{!w.vcmpNo}" >
+                                <apex:selectOptions value="{!w.ComponentCnt}" />  
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputText style="padding-left:10px;padding-right:10px;">Very Complex</apex:outputText>
+                                <apex:selectList size="1" value="{!w.vCcmpNo}" > 
+                                    <apex:selectOptions value="{!w.ComponentCnt}" />  
+                                </apex:selectList>
+                        </apex:pageBlockSectionItem> 
+                        
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        
+        <!-- SELECTED ACCOUNT INFO -->
+        
+            <apex:pageBlockSection >
+                <!---apex:outputPanel layout="block" rendered="{!hasSelCmp}">
+                    <apex:outputText value="Below are the selected account:"/>
+                    <br/>
+                    <apex:outputText value="{!selCmpNames}"/>
+                </apex:outputPanel>
+                <apex:outputPanel layout="block" rendered="{!NOT(hasSelCmp)}">
+                    <br/>
+                    <apex:outputText value="No account selected."/>
+                </apex:outputPanel--->
+                <apex:outputPanel layout="block" rendered="true">
+                    <apex:outputText value="Total hours require to estimate:"/>{!calculatedhrs} Hours
+                </apex:outputPanel>
+            </apex:pageBlockSection> 
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

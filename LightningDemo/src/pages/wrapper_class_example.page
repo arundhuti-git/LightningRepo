@@ -1,0 +1,22 @@
+<apex:page controller="wrapper_class_example">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageblockSection >
+                <apex:pageBlockTable value="{!wrapperlist}" var="a">
+                    
+                    <apex:column headerValue="Action">
+                        <apex:inputCheckbox />
+                    </apex:column>
+                    
+                    <apex:column value="{!a.name}" headerValue="Name"/>
+                    <apex:column value="{!a.industry}" headerValue="Industry"/>
+                     <apex:column value="{!a.cname}" headerValue="Conatct Name"/>
+                     <apex:column value="{!a.phone}" headerValue="Phone"/>
+                    
+                
+                </apex:pageBlockTable>
+            
+            </apex:pageblockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

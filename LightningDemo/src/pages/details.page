@@ -1,0 +1,13 @@
+<apex:page controller="cus_acct_details">
+<apex:form >
+
+    <h1>Details of custom account</h1> 
+    <apex:pageBlock >
+    
+          Account name is - <apex:outputField value="{!account.name}" /> <br/>
+          Account phone no is - <apex:outputField value="{!account.phone}"/> <br/>
+          
+      </apex:pageBlock> 
+      
+      </apex:form>
+</apex:page>

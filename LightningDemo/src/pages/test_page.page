@@ -1,0 +1,8 @@
+<apex:page controller="my_first_class">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: test_page
+  <apex:pageBlock >{!my_name}</apex:pageBlock>
+
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

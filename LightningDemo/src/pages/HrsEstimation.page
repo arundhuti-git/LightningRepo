@@ -1,0 +1,94 @@
+<apex:page controller="CalculateEstHrs">
+    <apex:includeScript value="{!$Resource.jquery}"/>
+    <apex:includeScript value="http://ajax.microsoft.com/ajax/jquery.validate/1.6/jquery.validate.min.js"/>
+    <script type="text/javascript"> 
+    j$ = jQuery.noConflict();
+    aItems = new Array();
+    
+    function onCmpNoClk(cmpVal,cmpno){
+        
+        //alert(cmpVal+ '/'+cmpno);
+        var cmp_lvl_set_string ='';
+        var current_div_id = cmpVal.toLowerCase();
+        current_div_id = current_div_id.replace('/','_');
+        //alert(current_div_id);
+        
+         for(i = 1;i <=cmpno;i++){
+             
+             cmp_lvl_set_string = cmp_lvl_set_string +"<div class='clr' >"+ cmpVal.replace("_", " ")+" " + i;
+             cmp_lvl_set_string = cmp_lvl_set_string +"<input type='radio' name='"+cmpVal+i+"_cmp_lvl_id' value='10' name='Simple'>Simple" ;
+             cmp_lvl_set_string = cmp_lvl_set_string +"<input type='radio' name='"+cmpVal+i+"_cmp_lvl_id' value='20' name='Medium'>Medium" ;
+             cmp_lvl_set_string = cmp_lvl_set_string +"<input type='radio' name='"+cmpVal+i+"_cmp_lvl_id' value='30' name='Complex'>Complex" ;
+             cmp_lvl_set_string = cmp_lvl_set_string +"<input type='radio' name='"+cmpVal+i+"_cmp_lvl_id'value='40' name='Very Complex'>Very Complex";
+             cmp_lvl_set_string = cmp_lvl_set_string +"</div>" ;
+             
+         }
+         document.getElementById(current_div_id).innerHTML = cmp_lvl_set_string;
+        }
+    
+    //New form functionality
+    
+    
+    </script>
+    
+    <apex:form id="EstimationForm" title="Calculate Hours" style="text-align: right; margin: 10px;">
+        <apex:pageBlock > 
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Calculate Estimated Hours" action="{!checkSelectedValue}" onclick="return check_validation_status(this.value);"  rendered="true"/> 
+                <!---apex:outputLink value="Next" rendered="{!If(NOT(hasSelCmp),false,true)}">Next</apex:outputLink--->
+                <apex:commandButton value="Next" action="{!calculateResource}"  rendered="true"/>
+            </apex:pageBlockButtons> 
+            
+            <apex:pageBlockSection >
+                <apex:pageBlockTable value="{!LstwrapperCmp}" var="w" style="width:999px">
+                    <apex:column headervalue="Component Name" >
+                        <div id="{!SUBSTITUTE(w.Name,' ','_')}">
+                            <apex:inputCheckbox value="{!w.isSelected}" styleClass="chkSelected" onclick="onCheck('{!SUBSTITUTE(w.Name,' ','_')}','')" />{!w.Name}
+                        </div>
+                    </apex:column>
+                    
+                    <apex:column headervalue="No of Component">
+                        <apex:pageBlockSectionItem >
+                           <apex:selectList size="1" value="{!w.selectedcmpNo}" onchange="onCmpNoClk('{!SUBSTITUTE(w.Name,' ','_')}',this.value)"  > 
+                               <apex:selectOptions value="{!ComponentCnt}"/>  
+                           </apex:selectList>
+                           <!---apex:actionSupport event="onchange" action="{!onCmpNoClk}" rerender="pb"/--->
+                        </apex:pageBlockSectionItem>  
+                    </apex:column>
+                                       
+                    <!--apex:column headervalue="Complexity Status">
+                        <apex:selectRadio value="{!w.selectedComplexity }" onclick="onCheck('{!SUBSTITUTE(w.Name,' ','_')}',this.value)"> <apex:selectOptions value="{!items}" /></apex:selectRadio>
+                    </apex:column--->
+                    
+                    <apex:column headervalue="Complexity Status(Please select 'No of Component')">
+                        <div id="{!w.Component}">
+                        	<!---apex:selectRadio value="{!w.selectedComplexity }" onclick="onCheck('{!SUBSTITUTE(w.Name,' ','_')}',this.value)"> <apex:selectOptions value="{!items}" /></apex:selectRadio-->
+                        </div>
+                    </apex:column>
+                    
+                    
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+            <!-- SELECTED ACCOUNT INFO -->
+            <apex:pageBlockSection >
+                <apex:outputPanel layout="block" rendered="{!hasSelCmp}">
+                    <apex:outputText value="Below are the selected account:"/>
+                    <br/>
+                    <apex:outputText value="{!selCmpNames}"/>
+                </apex:outputPanel>
+                <apex:outputPanel layout="block" rendered="{!NOT(hasSelCmp)}">
+                    <br/>
+                    <apex:outputText value="No account selected."/>
+                </apex:outputPanel>
+                
+                <apex:outputPanel layout="block" rendered="{!hasSelCmp}">
+                    <apex:outputText value="Total hours require to estimate:"/><apex:outputText value="{!calculatedhrs}"/> Hours
+                </apex:outputPanel>
+            </apex:pageBlockSection> 
+        </apex:pageBlock>
+        
+    </apex:form>
+    
+</apex:page>

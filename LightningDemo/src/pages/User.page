@@ -1,0 +1,7 @@
+<apex:page standardController="User">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+ Your name is -   
+  <!-- {!account_name}-->
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

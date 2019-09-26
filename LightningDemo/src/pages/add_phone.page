@@ -1,0 +1,10 @@
+<apex:page controller="cus_update_phone">
+  <apex:form >
+      <apex:pageBlock >
+          <apex:outputField value="{!acc.name}"/>   
+          <apex:inputField value="{!acc.phone}"/> 
+          
+      </apex:pageBlock>
+      <apex:commandButton action="{!save}" value="Update"/>
+  </apex:form>
+</apex:page>
